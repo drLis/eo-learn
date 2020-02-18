@@ -44,7 +44,7 @@ class SentinelHubInputBase(EOTask):
         self.data_source = data_source
         self.cache_folder = cache_folder
 
-    def execute(self, eopatch=None, bbox=None, time_interval=None):
+    def execute(self, eopatch=None, bbox=None, time_interval=None, timestamp=None):
         """ Main execute method for the Processing API tasks
         """
 
@@ -60,7 +60,9 @@ class SentinelHubInputBase(EOTask):
         elif self.resolution is not None:
             size_x, size_y = bbox_to_dimensions(eopatch.bbox, self.resolution)
 
-        if time_interval:
+        if timestamp:
+            pass
+        elif time_interval:
             time_interval = parse_time_interval(time_interval)
             timestamp = self._get_timestamp(time_interval, bbox)
         else:
@@ -144,7 +146,7 @@ class SentinelHubInputTask(SentinelHubInputBase):
         ]
     }
 
-    CUSTOM_BAND_TYPE = ProcApiType("custom", 'REFLECTANCE', 'FLOAT32', np.float32, FeatureType.DATA)
+    CUSTOM_BAND_TYPE = ProcApiType("custom", 'REFLECTANCE', 'UINT16', np.uint16, FeatureType.DATA)
 
     def __init__(self, data_source, size=None, resolution=None, bands_feature=None, bands=None, additional_data=None,
                  maxcc=1.0, time_difference=None, cache_folder=None, max_threads=None, config=None,
